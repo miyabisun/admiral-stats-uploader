@@ -36,12 +36,12 @@ rdirs('src').forEach(dir => {
       try {
         if (/^tests\//.test(it)) {
           await test(`${testDir}/${file}`)
-          hr()
         } else {
           await test(`${testDir}/test_${file}`)
-          hr()
         }
       } catch (e) { }
+      hr()
+      tasks.delete(file)
     })
   })
 })
