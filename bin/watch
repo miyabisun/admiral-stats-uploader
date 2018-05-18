@@ -20,7 +20,8 @@ const output = command => new Promise((resolve) => {
   p.stderr.pipe(process.stderr)
   p.on('close', () => resolve(true))
 })
-const test = file => { output(`nim c --hints:off -r ${file}`) }
+const test = file =>
+  output(`nim c --hints:off -r ${file}`)
 const hr = () => console.info('---------- ---------- ----------')
 
 rdirs('src').forEach(dir => {
@@ -33,8 +34,12 @@ rdirs('src').forEach(dir => {
       if (tasks.has(file)) return
       tasks.add(file)
       try {
-        if (dir) {
+        if (/^tests\//.test(it)) {
+          await test(`${testDir}/${file}`)
+          hr()
+        } else {
           await test(`${testDir}/test_${file}`)
+          hr()
         }
       } catch (e) { }
     })
