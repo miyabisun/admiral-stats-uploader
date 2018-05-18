@@ -37,7 +37,7 @@ rdirs('src').forEach(dir => {
         if (/^tests\//.test(it)) {
           await test(`${testDir}/${file}`)
         } else {
-          await test(`${testDir}/test_${file}`)
+          await test(`${testDir}/t${file}`)
         }
       } catch (e) { }
       hr()
