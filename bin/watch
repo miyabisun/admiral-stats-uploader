@@ -1,0 +1,45 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+const path = require('path')
+const {spawn} = require('child_process')
+
+const rdirs = (dir, results = []) => {
+  results.push(dir)
+  fs.readdirSync(`${__dirname}/../${dir}`)
+    .filter(it => !/^\./.test(it))
+    .filter(it => fs.statSync(`${__dirname}/../${dir}/${it}`).isDirectory())
+    .forEach(it => rdirs(`${dir}/${it}`, results))
+  return results
+}
+const output = command => new Promise((resolve) => {
+  console.info(`> ${command}`)
+  const it = command.split(' ')
+  const p = spawn(it[0], it.slice(1))
+  p.stdout.pipe(process.stdout)
+  p.stderr.pipe(process.stderr)
+  p.on('close', () => resolve(true))
+})
+const test = file => { output(`nim c --hints:off -r ${file}`) }
+const hr = () => console.info('---------- ---------- ----------')
+
+rdirs('src').forEach(dir => {
+  const tasks = new Set();
+  const testDir = `tests/${dir.replace(/^src\/?/, '')}`;
+  [dir, testDir].forEach(it => {
+    fs.watch(it, async (type, file) => {
+      if (type !== 'change') return
+      if (!/\.nim$/.test(file)) return
+      if (tasks.has(file)) return
+      tasks.add(file)
+      try {
+        if (dir) {
+          await test(`${testDir}/test_${file}`)
+        }
+      } catch (e) { }
+    })
+  })
+})
+
+console.info('Get Ready.')
+hr()
