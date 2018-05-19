@@ -3,5 +3,7 @@ let id = ospaths.get_env "AS_ID"
 let pass = ospaths.get_env "AS_PASS"
 
 suite "modules/login":
+  let login_cookie = login(id, pass)
   test "is successful":
-    echo login(id, pass)
+    check(login_cookie != "")
+
