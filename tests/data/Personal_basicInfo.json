@@ -1,0 +1,17 @@
+{
+  "admiralName":"テストユーザー",
+  "fuel":2500,
+  "ammo":1800,
+  "steel":2000,
+  "bauxite":1200,
+  "bucket":50,
+  "level":25,
+  "roomItemCoin":200,
+  "resultPoint":"3500",
+  "rank":"圏外",
+  "titleId":6,
+  "materialMax":5800,
+  "strategyPoint":1500,
+  "kouMedal":0,
+  "kouMedalHist":[]
+}
