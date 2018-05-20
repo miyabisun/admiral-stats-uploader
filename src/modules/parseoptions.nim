@@ -1,15 +1,15 @@
-import parseopt2
+import parseopt
 
 type
-  asuOptions* = tuple
-    id: string
-    pass: string
-    token: string
-    autoupdate: bool
-    help: bool
+  asuOptions* = object
+    id*: string
+    pass*: string
+    token*: string
+    autoupdate*: bool
+    help*: bool
 
 proc parseoptions*(str: string): asuOptions =
-  var options = (id: "", pass: "", token: "", autoupdate: false, help: false)
+  var options = asuOptions(id: "", pass: "", token: "", autoupdate: false, help: false)
   var p = initOptParser str
   for kind, key, val in p.getopt():
     case kind

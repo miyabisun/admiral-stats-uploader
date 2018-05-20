@@ -2,7 +2,7 @@ import unittest, ../../src/modules/parseoptions
 
 suite "modules/parseoptions":
   # default
-  let default = parseoptions ""
+  var default = parseoptions ""
   test "default: set option: id":
     check(default.id == "")
   test "default: set option: pass":
