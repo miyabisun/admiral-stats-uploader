@@ -2,7 +2,7 @@ import unittest, ../../src/modules/parseoptions
 
 suite "modules/parseoptions":
   # default
-  let default = options ""
+  let default = parseoptions ""
   test "default: set option: id":
     check(default.id == "")
   test "default: set option: pass":
@@ -15,7 +15,7 @@ suite "modules/parseoptions":
     check(default.help == false)
 
   # long
-  let long_opt = options "--id:foo --pass:password --token:123456abcdef --autoupdate --help"
+  let long_opt = parseoptions "--id:foo --pass:password --token:123456abcdef --autoupdate --help"
   test "long: set option: id":
     check(long_opt.id == "foo")
   test "long: set option: pass":
@@ -28,7 +28,7 @@ suite "modules/parseoptions":
     check(long_opt.help == true)
 
   # short
-  let short_opt = options "-i:foo -p:password -t:123456abcdef -a -h"
+  let short_opt = parseoptions "-i:foo -p:password -t:123456abcdef -a -h"
   test "short: set option: id":
     check(short_opt.id == "foo")
   test "short: set option: pass":

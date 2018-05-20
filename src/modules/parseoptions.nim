@@ -8,7 +8,7 @@ type
     autoupdate: bool
     help: bool
 
-proc options*(str: string): asuOptions =
+proc parseoptions*(str: string): asuOptions =
   var options = (id: "", pass: "", token: "", autoupdate: false, help: false)
   var p = initOptParser str
   for kind, key, val in p.getopt():
