@@ -35,9 +35,9 @@ rdirs('src').forEach(dir => {
       tasks.add(file)
       try {
         if (/^tests\//.test(it)) {
-          await test(`${testDir}/${file}`)
+          await test(`${testDir}${testDir == 'tests/' ? '' : '/'}${file}`)
         } else {
-          await test(`${testDir}/t${file}`)
+          await test(`${testDir}${testDir == 'tests/' ? '' : '/'}t${file}`)
         }
       } catch (e) { }
       hr()
