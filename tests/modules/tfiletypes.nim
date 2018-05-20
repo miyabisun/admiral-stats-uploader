@@ -1,7 +1,7 @@
 import unittest, ospaths, json, ../../src/modules/filetypes
-let token = ospaths.get_env "AS_TOKEN"
 
 suite "modules/filetypes":
+  let token = ospaths.get_env "AS_TOKEN"
   test "is failed":
     let types = filetypes("")
     check(types.len == 0)

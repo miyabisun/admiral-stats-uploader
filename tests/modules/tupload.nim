@@ -1,8 +1,8 @@
 import unittest, times, strutils, sequtils, ospaths, ../../src/modules/upload, ../../src/modules/filetypes
-let token = ospaths.get_env "AS_TOKEN"
-let time = format(now(), "yyyyMMdd,HHmmss").split(",").join("_")
 
 suite "modules/upload":
+  let token = ospaths.get_env "AS_TOKEN"
+  let time = format(now(), "yyyyMMdd,HHmmss").split(",").join("_")
   let types = filetypes(token)
   for path in types:
     test path & ": is failed":
