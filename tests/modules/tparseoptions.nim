@@ -1,8 +1,21 @@
 import unittest, ../../src/modules/parseoptions
 
 suite "modules/parseoptions":
-  let long_opt = options "--id:foo --pass:password --token:123456abcdef"
-  let short_opt = options "-i:foo -p:password -t:123456abcdef"
+  # default
+  let default = options ""
+  test "default: set option: id":
+    check(default.id == "")
+  test "default: set option: pass":
+    check(default.pass == "")
+  test "default: set option: token":
+    check(default.token == "")
+  test "default: set option: autoupdate":
+    check(default.autoupdate == false)
+  test "default: set option: help":
+    check(default.help == false)
+
+  # long
+  let long_opt = options "--id:foo --pass:password --token:123456abcdef --autoupdate --help"
   test "long: set option: id":
     check(long_opt.id == "foo")
   test "long: set option: pass":
@@ -10,7 +23,12 @@ suite "modules/parseoptions":
   test "long: set option: token":
     check(long_opt.token == "123456abcdef")
   test "long: set option: autoupdate":
-    check(long_opt.autoupdate == false)
+    check(long_opt.autoupdate == true)
+  test "long: set option: help":
+    check(long_opt.help == true)
+
+  # short
+  let short_opt = options "-i:foo -p:password -t:123456abcdef -a -h"
   test "short: set option: id":
     check(short_opt.id == "foo")
   test "short: set option: pass":
@@ -18,5 +36,7 @@ suite "modules/parseoptions":
   test "short: set option: token":
     check(short_opt.token == "123456abcdef")
   test "short: set option: autoupdate":
-    check(short_opt.autoupdate == false)
+    check(short_opt.autoupdate == true)
+  test "short: set option: help":
+    check(short_opt.help == true)
 
