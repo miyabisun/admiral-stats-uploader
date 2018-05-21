@@ -1,4 +1,4 @@
-import os, strutils, tables, httpclient, modules/parseoptions, modules/update
+import os, times, strutils, tables, httpclient, modules/parseoptions, modules/update, modules/isundermaintenance
 
 const HelpText = """
 Admiral Stats Uploader
@@ -24,7 +24,7 @@ Example:
   asu -i=aaa -p=bbb -t=ccc -a
 """
 
-proc main() =
+proc main () =
   let options = os.commandLineParams().join(" ").parseoptions
   if (options.help):
     echo HelpText
@@ -44,15 +44,20 @@ proc main() =
 
   # doing
   let client = newHttpClient()
-  if (not client.update options):
-    echo "Admiral Statsのアップデートに失敗しました。"
-    echo "ヘルプ(asu -h)を参考に、設定内容を見直してください。"
-    return
+  defer: client.close
+  if (now().isundermaintenance):
+    echo "現在メンテナンス中です。"
+  else:
+    if (not client.update options):
+      echo "Admiral Statsのアップデートに失敗しました。"
+      echo "ヘルプ(asu -h)を参考に、設定内容を見直してください。"
+      return
   if (options.autoupdate):
     echo "オートアップデートモードに入ります。"
     echo "30分毎に自動的に更新を行います。"
     while true:
       sleep 30 * 60 * 1000
-      discard client.update options
+      if (not now().isundermaintenance): discard client.update options
+
 main()
 
