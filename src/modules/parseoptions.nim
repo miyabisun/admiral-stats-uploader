@@ -7,9 +7,10 @@ type
     token*: string
     autoupdate*: bool
     help*: bool
+    verbose*: bool
 
 proc parseoptions*(str: string): asuOptions =
-  var options = asuOptions(id: "", pass: "", token: "", autoupdate: false, help: false)
+  var options = asuOptions(id: "", pass: "", token: "", autoupdate: false, help: false, verbose: false)
   var p = initOptParser str
   for kind, key, val in p.getopt():
     case kind
@@ -20,6 +21,7 @@ proc parseoptions*(str: string): asuOptions =
       of "token": options.token = val
       of "autoupdate": options.autoupdate = true
       of "help": options.help = true
+      of "verbose": options.verbose = true
     of cmdShortOption:
       case key
       of "i": options.id = val

@@ -13,9 +13,11 @@ suite "modules/parseoptions":
     check(default.autoupdate == false)
   test "default: set option: help":
     check(default.help == false)
+  test "default: set option: verbose":
+    check(default.verbose == false)
 
   # long
-  let long_opt = parseoptions "--id:foo --pass:password --token:123456abcdef --autoupdate --help"
+  let long_opt = parseoptions "--id:foo --pass:password --token:123456abcdef --autoupdate --help --verbose"
   test "long: set option: id":
     check(long_opt.id == "foo")
   test "long: set option: pass":
@@ -26,6 +28,8 @@ suite "modules/parseoptions":
     check(long_opt.autoupdate == true)
   test "long: set option: help":
     check(long_opt.help == true)
+  test "long: set option: verbose":
+    check(long_opt.verbose == true)
 
   # short
   let short_opt = parseoptions "-i:foo -p:password -t:123456abcdef -a -h"
