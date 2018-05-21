@@ -1,4 +1,4 @@
-import os, strutils, tables, modules/parseoptions, modules/update
+import os, strutils, tables, httpclient, modules/parseoptions, modules/update
 
 const HelpText = """
 Admiral Stats Uploader
@@ -15,6 +15,7 @@ Options:
   --pass=[Password], -p=[Password]  提督情報のPassword
   --token=[Token]  , -t=[Token]     Admiral StatsのAPIトークン
   --autoupdate     , -a             30分に一度自動実行
+  --verbose                         詳細出力を行います
   --help           , -h             ヘルプを表示します
 
 Example:
@@ -28,6 +29,8 @@ proc main() =
   if (options.help):
     echo HelpText
     return
+
+  # validate
   let checker = @[
     ("id", options.id),
     ("pass", options.pass),
@@ -36,19 +39,20 @@ proc main() =
   for val in checker:
     if (val[1] == ""):
       echo "エラー: " & val[0] & "は必須です"
-      echo "ヘルプを参考にオプションを設定し直してください。"
-      echo ""
-      echo HelpText
+      echo "ヘルプ(asu -h)を参考にオプションを設定し直してください。"
       return
-  if (not update(options)):
+
+  # doing
+  let client = newHttpClient()
+  if (not client.update options):
     echo "Admiral Statsのアップデートに失敗しました。"
-    echo "ヘルプ(-h)オプションを参考に、設定内容を見直してください。"
+    echo "ヘルプ(asu -h)を参考に、設定内容を見直してください。"
     return
   if (options.autoupdate):
     echo "オートアップデートモードに入ります。"
     echo "30分毎に自動的に更新を行います。"
     while true:
-      sleep(30 * 60 * 1000)
-      discard update(options)
+      sleep 30 * 60 * 1000
+      discard client.update options
 main()
 
