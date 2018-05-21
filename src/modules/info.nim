@@ -1,9 +1,8 @@
 import httpclient, strutils
+export httpclient.HttpClient
 
-proc info*(api_url: string, cookie: string): string =
+proc info*(client: HttpClient, api_url: string, cookie: string, verbose: bool = false): string =
   let url = "https://kancolle-arcade.net/ac/api/" & api_url
-  echo url
-  let client = newHttpClient()
   client.headers = newHttpHeaders({
     "Content-Type": "application/json;charset=UTF-8",
     "Referer": "https://kancolle-arcade.net/ac",
@@ -12,7 +11,7 @@ proc info*(api_url: string, cookie: string): string =
     "Cookie": cookie,
   })
   let response = client.request(url, HttpGet)
-  echo response.status
+  if verbose: echo "[get]" & api_url & "(" & response.status & ")"
   if response.status == "200 OK":
     result = response.body
   else:
