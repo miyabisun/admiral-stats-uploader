@@ -43,24 +43,26 @@ proc main () =
       return
 
   # doing
-  let client = newHttpClient()
-  defer: client.close
   if (now().isundermaintenance):
     echo "現在メンテナンス中です。"
   else:
+    let client = newHttpClient()
     if (not client.update options):
       echo "Admiral Statsのアップデートに失敗しました"
       echo "ヘルプ(asu -h)を参考に、設定内容を見直してください"
       return
+    client.close()
 
   if (options.autoupdate):
     echo "オートアップデートモードに入ります"
     echo "30分毎に自動的に更新を行います"
     while true:
       sleep 30 * 60 * 1000
+      let client = newHttpClient()
       echo now().format("yyyy-MM-dd HH:mm:ss") & ": アップデートを開始します"
       if (now().isundermaintenance): echo "メンテナンス中なのでスキップします"
       else: discard client.update options
+      client.close()
 
 main()
 
