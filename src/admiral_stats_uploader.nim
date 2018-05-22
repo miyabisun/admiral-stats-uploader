@@ -3,9 +3,9 @@ import os, times, strutils, tables, httpclient, modules/parseoptions, modules/up
 const HelpText = """
 Admiral Stats Uploader
 
-提督情報からJSONデータを抽出してAdmiral Statsにアップロードします。
-本家とは違って書き込み機能やコンフィグファイルはありません。
-'--id=ユーザID' みたいな感じでオプション指定して使ってください。
+提督情報からJSONデータを抽出してAdmiral Statsにアップロードします
+本家とは違って書き込み機能やコンフィグファイルはありません
+'--id=ユーザID' みたいな感じでオプション指定して使ってください
 
 Usage:
   asu [options]
@@ -39,7 +39,7 @@ proc main () =
   for val in checker:
     if (val[1] == ""):
       echo "エラー: " & val[0] & "は必須です"
-      echo "ヘルプ(asu -h)を参考にオプションを設定し直してください。"
+      echo "ヘルプ(asu -h)を参考にオプションを設定し直してください"
       return
 
   # doing
@@ -49,15 +49,18 @@ proc main () =
     echo "現在メンテナンス中です。"
   else:
     if (not client.update options):
-      echo "Admiral Statsのアップデートに失敗しました。"
-      echo "ヘルプ(asu -h)を参考に、設定内容を見直してください。"
+      echo "Admiral Statsのアップデートに失敗しました"
+      echo "ヘルプ(asu -h)を参考に、設定内容を見直してください"
       return
+
   if (options.autoupdate):
-    echo "オートアップデートモードに入ります。"
-    echo "30分毎に自動的に更新を行います。"
+    echo "オートアップデートモードに入ります"
+    echo "30分毎に自動的に更新を行います"
     while true:
       sleep 30 * 60 * 1000
-      if (not now().isundermaintenance): discard client.update options
+      echo now().format("yyyy-MM-dd HH:mm:ss") & ": アップデートを開始します"
+      if (now().isundermaintenance): echo "メンテナンス中なのでスキップします"
+      else: discard client.update options
 
 main()
 
